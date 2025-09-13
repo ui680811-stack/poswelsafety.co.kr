@@ -9,11 +9,11 @@
   <meta http-equiv="Expires" content="0" />
   <style>
     :root{
-      --bg:#f6f7fb; --card:#fff; --text:#222; --muted:#6b7280; --line:#e5e7eb;
-      --brand:#2f6ae0; --brand-100:#e7efff; --sidebar:#0f172a; --sidebar-2:#111827;
-      --ok:#22c55e; --warn:#f59e0b; --danger:#ef4444; --radius:16px;
+      --bg:#f6f7fb; --card:#fff; --text:#111827; --muted:#6b7280; --line:#e5e7eb;
+      --brand:#2f6ae0; --brand-100:#e7efff; --sidebar:#0f172a; --ok:#22c55e; --warn:#f59e0b; --danger:#ef4444; --radius:16px;
     }
-    *{box-sizing:border-box} body{margin:0;font-family:"Malgun Gothic","Apple SD Gothic Neo",system-ui,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:"Malgun Gothic","Apple SD Gothic Neo",system-ui,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
     a{color:inherit;text-decoration:none}
 
     /* ===== 로그인 레이어 ===== */
@@ -28,53 +28,76 @@
 
     /* ===== 앱 레이아웃 ===== */
     .app{display:grid;grid-template-columns:80px 1fr;grid-template-rows:60px 1fr;height:100vh}
-    .topbar{grid-column:1/3;grid-row:1/2;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line)}
+    .topbar{grid-column:1/3;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line)}
     .tb-left{display:flex;gap:10px;align-items:center}
     .logo{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--brand),#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
     .tb-title{font-weight:700}
     .tb-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
     .welcome{font-size:12px;color:#475569;line-height:1}
-    .btn{border:1px solid var(--line);background:#fff;padding:6px 10px;border-radius:10px;cursor:pointer}
-    .logout{border:1px solid #1f2937;background:#111827;color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;line-height:1}
+    .logout{border:1px solid #1f2937;background:#111827;color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;line-height:1;cursor:pointer}
 
-    .sidebar{grid-column:1/2;grid-row:2/3;background:var(--sidebar);color:#e5e7eb;display:flex;flex-direction:column;align-items:center;padding:10px 8px;gap:8px}
-    .nav-item{width:64px;height:64px;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:transparent;color:#cbd5e1;cursor:pointer;border:1px solid transparent}
+    .sidebar{grid-row:2/3;background:var(--sidebar);color:#e5e7eb;display:flex;flex-direction:column;align-items:center;padding:10px 8px;gap:8px}
+    .nav-item{width:64px;height:64px;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#cbd5e1;cursor:pointer;border:1px solid transparent}
     .nav-item:hover{background:#0b1220;border-color:#1f2937}
     .nav-item.active{background:#0b1220;color:#fff;border-color:#334155}
     .nav-ico{font-size:18px}
-    .nav-t{font-size:11px;letter-spacing:-.2px}
+    .nav-t{font-size:11px}
 
     .main{grid-column:2/3;grid-row:2/3;overflow:auto;padding:18px}
-    .hero{height:140px;border-radius:var(--radius);background:linear-gradient(120deg,#e9efff,#f8fafc);display:flex;align-items:center;justify-content:center;position:relative}
-    .hero h1{font-size:26px;letter-spacing:-.3px}
 
-    .grid{display:grid;grid-template-columns:2fr 1fr; gap:18px; margin-top:18px}
+    /* ===== 공통 카드 ===== */
     .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
     .card h3{margin:0 0 12px;font-size:16px}
-    .pill{font-size:12px;color:#475569;background:#f1f5f9;border:1px solid var(--line);padding:4px 8px;border-radius:999px}
 
-    .progress-wrap{display:grid;grid-template-columns:160px 1fr; gap:16px; align-items:center}
-    .kpis{display:grid;grid-template-columns:1fr 1fr; gap:10px}
+    /* ===== 메인(Home) ===== */
+    .hero{height:140px;border-radius:var(--radius);background:linear-gradient(120deg,#e9efff,#f8fafc);display:flex;align-items:center;justify-content:center}
+    .hero h1{font-size:26px;letter-spacing:-.3px}
+    .grid{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-top:18px}
+    .pill{font-size:12px;color:#475569;background:#f1f5f9;border:1px solid var(--line);padding:4px 8px;border-radius:999px}
+    .progress-wrap{display:grid;grid-template-columns:160px 1fr;gap:16px;align-items:center}
+    .kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .kpi{display:flex;align-items:center;gap:8px;border:1px dashed #e5e7eb;padding:8px;border-radius:12px;cursor:pointer}
     .kpi .dot{width:10px;height:10px;border-radius:50%}
     .kpi .name{font-size:13px;color:#334155}
     .kpi .status{margin-left:auto;font-size:12px}
     .kpi:hover{background:#f8fafc}
-    .kpi.ok .status{color:var(--ok)} .kpi.warn .status{color:var(--warn)} .kpi.danger .status{color:var(--danger)}
-
-    .calendar{border-top:1px solid var(--line);padding-top:10px}
+    .kpi.ok .status{color:var(--ok)} .kpi.warn .status{color:var(--warn)}
+    .tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+    .tile{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fbfdff;cursor:pointer}
+    .tile:hover{background:var(--brand-100)}
+    .note{margin-top:12px;font-size:12px;color:var(--muted)}
     .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
     .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
     .cal-grid div{height:34px;background:#f8fafc;border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#475569}
     .cal-grid .today{outline:2px solid var(--brand)}
 
+    /* ===== 사업장(Biz) ===== */
+    .biz-header{position:relative;background:#e5e7eb;border-radius:16px;overflow:hidden;margin-bottom:14px}
+    .biz-cover{height:140px;background:linear-gradient(120deg,#dbeafe,#f8fafc)}
+    .biz-row{display:flex;gap:16px;align-items:flex-end;position:relative;margin-top:-40px;padding:0 16px 16px}
+    .biz-avatar{width:96px;height:96px;border-radius:12px;border:4px solid #fff;background:#cbd5e1;display:flex;align-items:center;justify-content:center;font-weight:700}
+    .biz-title{flex:1}
+    .biz-title .name{font-size:22px;font-weight:800}
+    .biz-title .no{font-size:12px;color:#64748b;margin-left:8px}
+    .biz-actions{display:flex;gap:8px}
+    .btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;cursor:pointer}
+    .biz-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .info-list{display:grid;gap:10px}
+    .info-row{display:flex;gap:10px;align-items:flex-start}
+    .icon{width:22px;text-align:center;opacity:.75}
+    .muted{color:#64748b;font-size:12px}
+    .section{margin-top:16px}
+    .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+    .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .kpi-tile{background:#fbfdff;border:1px solid var(--line);border-radius:12px;padding:12px}
+    .kpi-t{font-size:12px;color:#64748b}
+    .kpi-v{font-size:18px;font-weight:800;margin-top:4px}
+    @media (max-width: 960px){.biz-grid{grid-template-columns:1fr}.kpi-row{grid-template-columns:repeat(2,1fr)}}
+
+    /* 페이지 표시/숨김 */
     .page{display:none}
     .page.active{display:block}
     .link{cursor:pointer}
-    .tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
-    .tile{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fbfdff;cursor:pointer}
-    .tile:hover{background:var(--brand-100)}
-    .note{margin-top:12px;font-size:12px;color:var(--muted)}
   </style>
 </head>
 <body>
@@ -94,7 +117,6 @@
 
   <!-- 앱 -->
   <div class="app" id="app" style="display:none">
-    <!-- Topbar -->
     <div class="topbar">
       <div class="tb-left">
         <div class="logo">S</div>
@@ -106,83 +128,40 @@
       </div>
     </div>
 
-    <!-- Sidebar -->
+    <!-- 사이드바 -->
     <aside class="sidebar">
-      <div class="nav-item active" data-page="home" title="메인">
-        <div class="nav-ico">🏠</div><div class="nav-t">메인</div>
-      </div>
-      <div class="nav-item" data-page="biz" title="사업장 관리">
-        <div class="nav-ico">🏭</div><div class="nav-t">사업장</div>
-      </div>
-      <div class="nav-item" data-page="work" title="작업 관리">
-        <div class="nav-ico">🛠️</div><div class="nav-t">작업</div>
-      </div>
-      <div class="nav-item" data-page="law" title="산업안전보건법">
-        <div class="nav-ico">📚</div><div class="nav-t">법령</div>
-      </div>
-      <div class="nav-item" data-page="counsel" title="안전문답/게시판">
-        <div class="nav-ico">💬</div><div class="nav-t">문답</div>
-      </div>
-      <div class="nav-item" data-page="report" title="컨설팅 보고서">
-        <div class="nav-ico">📄</div><div class="nav-t">보고서</div>
-      </div>
-      <div class="nav-item" data-page="data" title="데이터센터">
-        <div class="nav-ico">📊</div><div class="nav-t">데이터</div>
-      </div>
+      <div class="nav-item active" data-page="home" title="메인"><div class="nav-ico">🏠</div><div class="nav-t">메인</div></div>
+      <div class="nav-item" data-page="biz" title="사업장 관리"><div class="nav-ico">🏭</div><div class="nav-t">사업장</div></div>
+      <div class="nav-item" data-page="work" title="작업 관리"><div class="nav-ico">🛠️</div><div class="nav-t">작업</div></div>
+      <div class="nav-item" data-page="law" title="산업안전보건법"><div class="nav-ico">📚</div><div class="nav-t">법령</div></div>
+      <div class="nav-item" data-page="counsel" title="안전문답/게시판"><div class="nav-ico">💬</div><div class="nav-t">문답</div></div>
+      <div class="nav-item" data-page="report" title="컨설팅 보고서"><div class="nav-ico">📄</div><div class="nav-t">보고서</div></div>
+      <div class="nav-item" data-page="data" title="데이터센터"><div class="nav-ico">📊</div><div class="nav-t">데이터</div></div>
     </aside>
 
-    <!-- Main -->
+    <!-- 메인 콘텐츠 -->
     <main class="main">
-      <section class="hero">
-        <h1>안전의 시작은 "현장"</h1>
-      </section>
-
+      <!-- ===== Home ===== -->
       <section class="page active" id="page-home">
+        <section class="hero"><h1>안전의 시작은 "현장"</h1></section>
         <div class="grid">
           <div class="card">
             <h3>사업장 안전보건관리체계</h3>
             <div class="pill">기본 안전보건관리체계 구축 진행</div>
-
             <div class="progress-wrap" style="margin-top:14px">
               <svg width="160" height="160" viewBox="0 0 120 120" aria-label="진행률 62.5%">
                 <circle cx="60" cy="60" r="50" fill="none" stroke="#eef2ff" stroke-width="14"/>
-                <circle cx="60" cy="60" r="50" fill="none" stroke="var(--brand)" stroke-width="14" stroke-linecap="round"
-                        stroke-dasharray="314" stroke-dashoffset="calc(314 - 314*0.625)"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="var(--brand)" stroke-width="14" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="calc(314 - 314*0.625)"/>
                 <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="18" fill="#334155">62.5%</text>
               </svg>
               <div class="kpis">
-                <div class="kpi warn link" data-link="조직">
-                  <span class="dot" style="background:var(--warn)"></span>
-                  <span class="name">안전보건관리 조직</span>
-                  <span class="status">등록 필요</span>
-                </div>
-                <div class="kpi ok link" data-link="경영방침">
-                  <span class="dot" style="background:var(--ok)"></span>
-                  <span class="name">안전보건 경영방침</span>
-                  <span class="status">완료</span>
-                </div>
-                <div class="kpi ok link" data-link="목표">
-                  <span class="dot" style="background:var(--ok)"></span>
-                  <span class="name">안전보건 목표</span>
-                  <span class="status">완료</span>
-                </div>
-                <div class="kpi warn link" data-link="위원회">
-                  <span class="dot" style="background:var(--warn)"></span>
-                  <span class="name">산업안전보건위원회</span>
-                  <span class="status">미등록</span>
-                </div>
-                <div class="kpi link" data-link="예산">
-                  <span class="dot" style="background:#60a5fa"></span>
-                  <span class="name">안전보건 예산 편성</span>
-                  <span class="status">등록</span>
-                </div>
-                <div class="kpi ok link" data-link="관련조치">
-                  <span class="dot" style="background:var(--ok)"></span>
-                  <span class="name">안전보건 관련조치</span>
-                  <span class="status">완료</span>
-                </div>
+                <div class="kpi warn link" data-link="조직"><span class="dot" style="background:var(--warn)"></span><span class="name">안전보건관리 조직</span><span class="status">등록 필요</span></div>
+                <div class="kpi ok link" data-link="경영방침"><span class="dot" style="background:var(--ok)"></span><span class="name">안전보건 경영방침</span><span class="status">완료</span></div>
+                <div class="kpi ok link" data-link="목표"><span class="dot" style="background:var(--ok)"></span><span class="name">안전보건 목표</span><span class="status">완료</span></div>
+                <div class="kpi warn link" data-link="위원회"><span class="dot" style="background:var(--warn)"></span><span class="name">산업안전보건위원회</span><span class="status">미등록</span></div>
+                <div class="kpi link" data-link="예산"><span class="dot" style="background:#60a5fa"></span><span class="name">안전보건 예산 편성</span><span class="status">등록</span></div>
+                <div class="kpi ok link" data-link="관련조치"><span class="dot" style="background:var(--ok)"></span><span class="name">안전보건 관련조치</span><span class="status">완료</span></div>
               </div>
-
               <div class="tiles">
                 <div class="tile link" data-link="문서함">📂 결재해야 하는 문서</div>
                 <div class="tile link" data-link="도움업무">🧰 요청받은 도움 업무</div>
@@ -190,19 +169,62 @@
               <div class="note">각 항목을 클릭하면 관련 페이지로 이동합니다.</div>
             </div>
           </div>
-
           <div class="card">
-            <div class="cal-header"><strong>일정</strong><div>
-              <button class="btn" id="btn-today">오늘</button>
-              <button class="btn" id="btn-add">+ 일정 등록하기</button>
-            </div></div>
+            <div class="cal-header"><strong>일정</strong><div><button class="btn" id="btn-today">오늘</button><button class="btn" id="btn-add">+ 일정 등록하기</button></div></div>
             <div style="font-size:12px;color:#475569;margin-bottom:6px" id="cal-month"></div>
             <div class="cal-grid" id="cal-grid"></div>
           </div>
         </div>
       </section>
 
-      <section id="page-biz" class="page"><div class="card"><h3>사업장 관리</h3><p>사업장 정보 관리 페이지입니다.</p></div></section>
+      <!-- ===== Biz (프로필형) ===== -->
+      <section id="page-biz" class="page">
+        <div class="biz-header card">
+          <div class="biz-cover"></div>
+          <div class="biz-row">
+            <div class="biz-avatar">IMG</div>
+            <div class="biz-title">
+              <div class="name">포스웰 <span class="no">[10018210]</span></div>
+              <div class="muted">법인명(단체명): (사)새마을복지회</div>
+            </div>
+            <div class="biz-actions">
+              <button class="btn">스마트 보고서 인증 현황</button>
+              <button class="btn">사업장 설정</button>
+            </div>
+          </div>
+        </div>
+        <div class="biz-grid">
+          <div class="card"><h3>기본 정보</h3>
+            <div class="info-list">
+              <div class="info-row"><div class="icon">👤</div><div><strong>대표</strong> 김삼락</div></div>
+              <div class="info-row"><div class="icon">👥</div><div><strong>근로자수</strong> 100명</div></div>
+              <div class="info-row"><div class="icon">📞</div><div>054-221-9145</div></div>
+              <div class="info-row"><div class="icon">📠</div><div>054-221-9199</div></div>
+              <div class="info-row"><div class="icon">📍</div><div>경상북도 포항시 남구 평보길 21(대잠동) 포스웰</div></div>
+              <div class="info-row"><div class="icon">🧾</div><div>사업자등록번호 506-82-02496 <a href="#" class="muted">(통신판매업)</a></div></div>
+            </div>
+          </div>
+          <div class="card"><h3>분류 정보</h3>
+            <div class="info-list">
+              <div class="info-row"><div class="icon">🏷️</div><div><strong>한국표준산업분류</strong><br>55909 | 그 외 기타 숙박업</div></div>
+              <div class="info-row"><div class="icon">🏷️</div><div><strong>산업재해보상보험업무</strong><br>910 | 도소매·음식·숙박업</div></div>
+              <div class="info-row"><div class="icon">📄</div><div><strong>관할 지자체/고용노동부</strong><br>포항시청</div></div>
+              <div class="info-row"><div class="icon">🏢</div><div><strong>관할 대한산업안전협회</strong><br>포항지회</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-head"><strong>부서 및 근로자 정보</strong><a class="btn" href="#">부서 및 근로자 정보 보기 〉</a></div>
+          <div class="kpi-row">
+            <div class="kpi-tile"><div class="kpi-t">결재 요청</div><div class="kpi-v">0건</div></div>
+            <div class="kpi-tile"><div class="kpi-t">부서</div><div class="kpi-v">0개</div></div>
+            <div class="kpi-tile"><div class="kpi-t">안전보건담당자</div><div class="kpi-v">0명</div></div>
+            <div class="kpi-tile"><div class="kpi-t">근로자</div><div class="kpi-v">3명</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 나머지 페이지(간단 템플릿) ===== -->
       <section id="page-work" class="page"><div class="card"><h3>작업 관리</h3><p>작업/공정, 허가서 등을 관리합니다.</p></div></section>
       <section id="page-law" class="page"><div class="card"><h3>산업안전보건법</h3><p>관련 법령/지침 링크를 구성합니다.</p></div></section>
       <section id="page-counsel" class="page"><div class="card"><h3>안전문답/게시판</h3><p>Q&A 및 공지 게시판.</p></div></section>
@@ -218,39 +240,27 @@
     const id=document.getElementById('id');
     const pw=document.getElementById('pw');
     const err=document.getElementById('err');
-
     function showApp(){L.style.display='none';A.style.display='grid';}
     function showLogin(){A.style.display='none';L.style.display='flex';id.value='';pw.value='';err.style.display='none';}
-
-    document.getElementById('login').addEventListener('click',()=>{
-      if(id.value.trim()==='poswel'&&pw.value==='poswel'){
-        sessionStorage.setItem('signed','1');
-        showApp();
-      }else{err.style.display='block';}
-    });
-    [id,pw].forEach(el=>el.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('login').click();}));
+    function doLogin(){ if(id.value.trim()==='poswel'&&pw.value==='poswel'){sessionStorage.setItem('signed','1');showApp();} else {err.style.display='block';} }
+    document.getElementById('login').addEventListener('click',doLogin);
+    [id,pw].forEach(el=>el.addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();}));
     if(sessionStorage.getItem('signed')==='1')showApp();
-
-    document.getElementById('btn-logout').addEventListener('click',()=>{
-      sessionStorage.removeItem('signed');
-      history.replaceState(null,'',location.pathname);
-      showLogin();
-    });
+    document.getElementById('btn-logout').addEventListener('click',()=>{sessionStorage.removeItem('signed');history.replaceState(null,'',location.pathname);showLogin();});
 
     // ===== 라우터 =====
-    const pages={home:document.getElementById('page-home'),biz:document.getElementById('page-biz'),work:document.getElementById('page-work'),law:document.getElementById('page-law'),counsel:document.getElementById('page-counsel'),report:document.getElementById('page-report'),data:document.getElementById('page-data'),};
-    function go(page){Object.values(pages).forEach(p=>p.classList.remove('active'));pages[page].classList.add('active');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');window.location.hash=page;}
+    const pages={home:'page-home',biz:'page-biz',work:'page-work',law:'page-law',counsel:'page-counsel',report:'page-report',data:'page-data'};
+    function go(page){ Object.values(pages).forEach(id=>document.getElementById(id).classList.remove('active')); document.getElementById(pages[page]).classList.add('active'); document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active'); window.location.hash=page; }
     document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>go(n.dataset.page)));
-    window.addEventListener('load',()=>{const h=location.hash.replace('#','');go(pages[h]?h:'home');})
+    window.addEventListener('load',()=>{ const h=location.hash.replace('#',''); go(pages[h]?h:'home'); });
 
-    document.querySelectorAll('.link').forEach(el=>{el.addEventListener('click',()=>{const t=(el.dataset.link||'').toLowerCase();if(['조직','위원회','예산','경영방침','목표','관련조치'].includes(t))go('biz');else if(['문서함','도움업무'].includes(t))go('report');else go('home');});});
-
-    // 달력
-    const calGrid=document.getElementById('cal-grid');const calMonth=document.getElementById('cal-month');
-    function renderCalendar(d=new Date()){calGrid.innerHTML='';const y=d.getFullYear(),m=d.getMonth();calMonth.textContent=`${y}년 ${m+1}월`;const first=new Date(y,m,1),last=new Date(y,m+1,0);const offset=first.getDay();for(let i=0;i<offset;i++){const c=document.createElement('div');c.textContent='';calGrid.appendChild(c);}for(let day=1;day<=last.getDate();day++){const cell=document.createElement('div');cell.textContent=day;const today=new Date();if(day===today.getDate()&&m===today.getMonth()&&y===today.getFullYear())cell.classList.add('today');calGrid.appendChild(cell);}}
-    renderCalendar();document.getElementById('btn-today').addEventListener('click',()=>renderCalendar(new Date()));document.getElementById('btn-add').addEventListener('click',()=>alert('일정 등록 폼은 추후 연결'));
-
-    window.addEventListener('beforeunload',()=>{try{sessionStorage.removeItem('signed');}catch(_){}});
+    // 홈 화면 달력
+    const calGrid=document.getElementById('cal-grid'); const calMonth=document.getElementById('cal-month');
+    function renderCalendar(d=new Date()){ if(!calGrid) return; calGrid.innerHTML=''; const y=d.getFullYear(), m=d.getMonth(); calMonth.textContent=`${y}년 ${m+1}월`; const first=new Date(y,m,1), last=new Date(y,m+1,0); const offset=first.getDay(); for(let i=0;i<offset;i++){const c=document.createElement('div'); calGrid.appendChild(c);} for(let day=1; day<=last.getDate(); day++){ const cell=document.createElement('div'); cell.textContent=day; const today=new Date(); if(day===today.getDate()&&m===today.getMonth()&&y===today.getFullYear()) cell.classList.add('today'); calGrid.appendChild(cell);} }
+    renderCalendar();
+    const todayBtn=document.getElementById('btn-today'); const addBtn=document.getElementById('btn-add');
+    if(todayBtn) todayBtn.addEventListener('click',()=>renderCalendar(new Date()));
+    if(addBtn) addBtn.addEventListener('click',()=>alert('일정 등록 폼은 추후 연결'));
   </script>
 </body>
 </html>
