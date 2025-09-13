@@ -3,152 +3,246 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>안전행정섹션 안전보건관리체계</title>
-  <link rel="canonical" href="https://poswel-safety.co.kr/" />
-  <meta name="description" content="POSWEL Safety | 안전행정섹션 안전보건관리체계 포털" />
-  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
-  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
-  <!-- 캐시를 최대한 막아 새로 열릴 때 로그인부터 보이도록 -->
-  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
+  <title>안전보건 대시보드 | 안전행정섹션</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Malgun Gothic', sans-serif; min-height: 100vh; background-color: #f4f6f7; }
-
-    /* 로그인 화면 */
-    #login-container { display: flex; justify-content: center; align-items: center; height: 100vh; }
-    #login-box { background: #ffffff; padding: 40px; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.1); width: 320px; }
-    #login-box h2 { text-align: center; margin-bottom: 20px; color: #2c3e50; }
-    #login-box input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
-    #login-box button { width: 100%; padding: 10px; background-color: #2c3e50; color: #fff; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
-    #login-error { color: red; font-size: 14px; text-align: center; display: none; }
-
-    /* 본문 화면: 처음엔 숨김 */
-    #main-container { display: none; min-height: 100vh; }
-
-    /* 레이아웃 */
-    .layout { display: flex; }
-    .sidebar { width: 250px; background-color: #2c3e50; color: #ecf0f1; padding: 20px; transition: width 0.3s ease; overflow: hidden; position: relative; }
-    .sidebar.collapsed { width: 60px; }
-    .sidebar h2 { margin-bottom: 20px; font-size: 20px; border-bottom: 1px solid #7f8c8d; padding-bottom: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .sidebar ul { list-style: none; }
-    .sidebar ul li { margin: 15px 0; cursor: pointer; transition: background 0.3s; padding: 10px; border-radius: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .sidebar ul li:hover { background-color: #34495e; }
-    .toggle-btn { background: none; border: none; color: #ecf0f1; font-size: 18px; cursor: pointer; position: absolute; top: 20px; right: -15px; background-color: #34495e; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; }
-    .main { flex: 1; padding: 40px; background-color: #f4f6f7; }
-    .main h1 { font-size: 28px; color: #2c3e50; margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between; }
-    .logout-btn { padding: 8px 14px; border: 1px solid #2c3e50; background: #fff; color: #2c3e50; border-radius: 8px; cursor: pointer; }
-
-    /* 보조: 숨김/표시 클래스 */
-    .hidden { display: none !important; }
-    .flex { display: flex !important; }
+    :root{
+      --bg:#f6f7fb; --card:#fff; --text:#222; --muted:#6b7280; --line:#e5e7eb;
+      --brand:#2f6ae0; --brand-100:#e7efff; --sidebar:#0f172a; --sidebar-2:#111827;
+      --ok:#22c55e; --warn:#f59e0b; --danger:#ef4444;
+      --radius:16px;
+    }
+    *{box-sizing:border-box} body{margin:0;font-family:"Malgun Gothic","Apple SD Gothic Neo",system-ui,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    a{color:inherit;text-decoration:none}
+    .app{display:grid;grid-template-columns: 80px 1fr; grid-template-rows:60px 1fr; height:100vh}
+    /* Topbar */
+    .topbar{grid-column:1/3;grid-row:1/2;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line)}
+    .tb-left{display:flex;gap:10px;align-items:center}
+    .logo{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--brand),#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+    .tb-title{font-weight:700}
+    .tb-right{display:flex;align-items:center;gap:10px}
+    .chip{font-size:12px;color:#fff;background:#64748b;padding:4px 8px;border-radius:999px}
+    .avatar{width:28px;height:28px;border-radius:50%;background:#cbd5e1}
+    .btn{border:1px solid var(--line);background:#fff;padding:6px 10px;border-radius:10px;cursor:pointer}
+    /* Sidebar */
+    .sidebar{grid-column:1/2;grid-row:2/3;background:var(--sidebar);color:#e5e7eb;display:flex;flex-direction:column;align-items:center;padding:10px 8px;gap:8px}
+    .nav-item{width:64px;height:64px;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:transparent;color:#cbd5e1;cursor:pointer;border:1px solid transparent}
+    .nav-item:hover{background:#0b1220;border-color:#1f2937}
+    .nav-item.active{background:#0b1220;color:#fff;border-color:#334155}
+    .nav-ico{font-size:18px}
+    .nav-t{font-size:11px;letter-spacing:-.2px}
+    /* Main */
+    .main{grid-column:2/3;grid-row:2/3;overflow:auto;padding:18px}
+    .hero{height:140px;border-radius:var(--radius);background:linear-gradient(120deg,#e9efff,#f8fafc);display:flex;align-items:center;justify-content:center;position:relative}
+    .hero h1{font-size:26px;letter-spacing:-.3px}
+    /* Grid */
+    .grid{display:grid;grid-template-columns:2fr 1fr; gap:18px; margin-top:18px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+    .card h3{margin:0 0 12px;font-size:16px}
+    .pill{font-size:12px;color:#475569;background:#f1f5f9;border:1px solid var(--line);padding:4px 8px;border-radius:999px}
+    /* Progress */
+    .progress-wrap{display:grid;grid-template-columns:160px 1fr; gap:16px; align-items:center}
+    .kpis{display:grid;grid-template-columns:1fr 1fr; gap:10px}
+    .kpi{display:flex;align-items:center;gap:8px;border:1px dashed #e5e7eb;padding:8px;border-radius:12px;cursor:pointer}
+    .kpi .dot{width:10px;height:10px;border-radius:50%}
+    .kpi .name{font-size:13px;color:#334155}
+    .kpi .status{margin-left:auto;font-size:12px}
+    .kpi:hover{background:#f8fafc}
+    .kpi.ok .status{color:var(--ok)} .kpi.warn .status{color:var(--warn)} .kpi.danger .status{color:var(--danger)}
+    /* Right column widgets */
+    .calendar{border-top:1px solid var(--line);padding-top:10px}
+    .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+    .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+    .cal-grid div{height:34px;background:#f8fafc;border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#475569}
+    .cal-grid .today{outline:2px solid var(--brand)}
+    /* Router sections */
+    .page{display:none}
+    .page.active{display:block}
+    .link{cursor:pointer}
+    /* CTA tiles under progress */
+    .tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+    .tile{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fbfdff;cursor:pointer}
+    .tile:hover{background:var(--brand-100)}
+    /* Footer note */
+    .note{margin-top:12px;font-size:12px;color:var(--muted)}
+    /* Simple icon font (Emoji) */
+    .i{font-style:normal}
   </style>
 </head>
 <body>
-  <!-- 로그인 화면 -->
-  <div id="login-container">
-    <div id="login-box">
-      <h2>로그인</h2>
-      <input type="text" id="username" placeholder="아이디" autocomplete="off" />
-      <input type="password" id="password" placeholder="비밀번호" autocomplete="off" />
-      <div id="login-error">아이디 또는 비밀번호가 올바르지 않습니다.</div>
-      <button id="login-btn" aria-label="로그인">로그인</button>
-    </div>
-  </div>
-
-  <!-- 본문 화면 (처음엔 display:none) -->
-  <div id="main-container" class="hidden">
-    <div class="layout">
-      <div class="sidebar" id="sidebar">
-        <button class="toggle-btn" id="toggleBtn" aria-label="메뉴 접기/펼치기">⮜</button>
-        <h2>메뉴</h2>
-        <ul>
-          <li>1. 안전보건경영방침 및 목표</li>
-          <li>2. TBM</li>
-          <li>3. 위험성평가</li>
-          <li>4. 안전보건교육</li>
-          <li>5. MSDS</li>
-        </ul>
+  <div class="app">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="tb-left">
+        <div class="logo">S</div>
+        <div class="tb-title">안전보건관리체계 포털</div>
       </div>
-
-      <div class="main">
-        <h1>
-          안전행정섹션 안전보건관리체계
-          <button id="logout-btn" class="logout-btn" aria-label="로그아웃">로그아웃</button>
-        </h1>
-        <p>여기에 본문 내용을 추가하세요.</p>
+      <div class="tb-right">
+        <!-- 요청: 상단 '무료 플랜' 제거 → 표시하지 않음 -->
+        <button class="btn" id="btn-notify">알림</button>
+        <div class="avatar" title="사용자"></div>
       </div>
     </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="nav-item active" data-page="home" title="메인">
+        <div class="nav-ico">🏠</div><div class="nav-t">메인</div>
+      </div>
+      <div class="nav-item" data-page="biz" title="사업장 관리">
+        <div class="nav-ico">🏭</div><div class="nav-t">사업장</div>
+      </div>
+      <div class="nav-item" data-page="work" title="작업 관리">
+        <div class="nav-ico">🛠️</div><div class="nav-t">작업</div>
+      </div>
+      <div class="nav-item" data-page="law" title="산업안전보건법">
+        <div class="nav-ico">📚</div><div class="nav-t">법령</div>
+      </div>
+      <div class="nav-item" data-page="counsel" title="안전문답/게시판">
+        <div class="nav-ico">💬</div><div class="nav-t">문답</div>
+      </div>
+      <div class="nav-item" data-page="report" title="컨설팅 보고서">
+        <div class="nav-ico">📄</div><div class="nav-t">보고서</div>
+      </div>
+      <div class="nav-item" data-page="data" title="데이터센터">
+        <div class="nav-ico">📊</div><div class="nav-t">데이터</div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <!-- HERO (여성 사진 배너는 제거) -->
+      <section class="hero">
+        <h1>안전의 시작은 "현장"</h1>
+      </section>
+
+      <!-- ROUTER: HOME PAGE -->
+      <section class="page active" id="page-home">
+        <div class="grid">
+          <div class="card">
+            <h3>사업장 안전보건관리체계</h3>
+            <div class="pill">기본 안전보건관리체계 구축 진행</div>
+
+            <div class="progress-wrap" style="margin-top:14px">
+              <!-- Progress Donut 62.5% -->
+              <svg width="160" height="160" viewBox="0 0 120 120" aria-label="진행률 62.5%">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#eef2ff" stroke-width="14"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="var(--brand)" stroke-width="14" stroke-linecap="round"
+                        stroke-dasharray="314"
+                        stroke-dashoffset="calc(314 - 314*0.625)"/>
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="18" fill="#334155">62.5%</text>
+              </svg>
+              <div class="kpis">
+                <div class="kpi warn link" data-link="조직">
+                  <span class="dot" style="background:var(--warn)"></span>
+                  <span class="name">안전보건관리 조직</span>
+                  <span class="status">등록 필요</span>
+                </div>
+                <div class="kpi ok link" data-link="경영방침">
+                  <span class="dot" style="background:var(--ok)"></span>
+                  <span class="name">안전보건 경영방침</span>
+                  <span class="status">완료</span>
+                </div>
+                <div class="kpi ok link" data-link="목표">
+                  <span class="dot" style="background:var(--ok)"></span>
+                  <span class="name">안전보건 목표</span>
+                  <span class="status">완료</span>
+                </div>
+                <div class="kpi warn link" data-link="위원회">
+                  <span class="dot" style="background:var(--warn)"></span>
+                  <span class="name">산업안전보건위원회</span>
+                  <span class="status">미등록</span>
+                </div>
+                <div class="kpi link" data-link="예산">
+                  <span class="dot" style="background:#60a5fa"></span>
+                  <span class="name">안전보건 예산 편성</span>
+                  <span class="status">등록</span>
+                </div>
+                <div class="kpi ok link" data-link="관련조치">
+                  <span class="dot" style="background:var(--ok)"></span>
+                  <span class="name">안전보건 관련조치</span>
+                  <span class="status">완료</span>
+                </div>
+              </div>
+
+              <div class="tiles">
+                <div class="tile link" data-link="문서함">📂 결재해야 하는 문서</div>
+                <div class="tile link" data-link="도움업무">🧰 요청받은 도움 업무</div>
+              </div>
+              <div class="note">각 항목을 클릭하면 관련 페이지로 이동합니다.</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="cal-header"><strong>일정</strong><div>
+              <button class="btn" id="btn-today">오늘</button>
+              <button class="btn" id="btn-add">+ 일정 등록하기</button>
+            </div></div>
+            <div style="font-size:12px;color:#475569;margin-bottom:6px" id="cal-month"></div>
+            <div class="cal-grid" id="cal-grid"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROUTER PAGES (간단 더미) -->
+      <section id="page-biz" class="page"><div class="card"><h3>사업장 관리</h3><p>사업장 정보 관리 페이지입니다.</p></div></section>
+      <section id="page-work" class="page"><div class="card"><h3>작업 관리</h3><p>작업/공정, 허가서 등을 관리합니다.</p></div></section>
+      <section id="page-law" class="page"><div class="card"><h3>산업안전보건법</h3><p>관련 법령/지침 링크를 구성합니다.</p></div></section>
+      <section id="page-counsel" class="page"><div class="card"><h3>안전문답/게시판</h3><p>Q&A 및 공지 게시판.</p></div></section>
+      <section id="page-report" class="page"><div class="card"><h3>컨설팅 보고서</h3><p>보고서 업로드/다운로드.</p></div></section>
+      <section id="page-data" class="page"><div class="card"><h3>데이터센터</h3><p>지표/통계 대시보드.</p></div></section>
+    </main>
   </div>
 
   <script>
-    // 항상 로그인부터 보이게: 초기화 (캐시되었어도 강제 초기 상태)
-    (function resetView() {
-      const loginContainer = document.getElementById('login-container');
-      const mainContainer  = document.getElementById('main-container');
-      if (loginContainer && mainContainer) {
-        loginContainer.classList.remove('hidden');
-        loginContainer.style.display = 'flex';
-        mainContainer.classList.add('hidden');
-        mainContainer.classList.remove('flex');
-      }
-      // 혹시 이전 코드로 저장된 값이 있다면 제거
-      try { localStorage.removeItem('ps_logged_in'); sessionStorage.clear(); } catch (e) {}
-    })();
+    // Simple Router (single file): show section by id
+    const pages = {
+      home: document.getElementById('page-home'),
+      biz: document.getElementById('page-biz'),
+      work: document.getElementById('page-work'),
+      law: document.getElementById('page-law'),
+      counsel: document.getElementById('page-counsel'),
+      report: document.getElementById('page-report'),
+      data: document.getElementById('page-data'),
+    };
+    function go(page){
+      Object.values(pages).forEach(p=>p.classList.remove('active'));
+      pages[page].classList.add('active');
+      document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+      document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');
+      window.location.hash = page;
+    }
+    document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>go(n.dataset.page)));
+    window.addEventListener('load',()=>{ const h=location.hash.replace('#',''); go(pages[h]?h:'home');})
 
-    // 브라우저 뒤로가기 시 BFCache로 메인화면이 남지 않게 재로딩
-    window.addEventListener('pageshow', function (e) {
-      if (e.persisted) location.reload();
+    // Clickable KPIs / Tiles: navigate (for now route to biz/work pages)
+    document.querySelectorAll('.link').forEach(el=>{
+      el.addEventListener('click',()=>{
+        const target = (el.dataset.link||'').toLowerCase();
+        if(['조직','위원회','예산','경영방침','목표','관련조치'].includes(target)) go('biz');
+        else if(['문서함','도움업무'].includes(target)) go('report');
+        else go('home');
+      });
     });
 
-    // 사이드바 토글
-    const sidebar = document.getElementById('sidebar');
-    const toggleBtn = document.getElementById('toggleBtn');
-    if (toggleBtn) {
-      toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('collapsed');
-        toggleBtn.textContent = sidebar.classList.contains('collapsed') ? '⮞' : '⮜';
-      });
-    }
-
-    // 로그인 로직 (저장소 사용 없음: 새 창/새로고침마다 다시 로그인)
-    const loginContainer = document.getElementById('login-container');
-    const mainContainer  = document.getElementById('main-container');
-    const loginBtn = document.getElementById('login-btn');
-    const usernameEl = document.getElementById('username');
-    const passwordEl = document.getElementById('password');
-    const errorMsg   = document.getElementById('login-error');
-
-    function showMain() {
-      loginContainer.classList.add('hidden');
-      mainContainer.classList.remove('hidden');
-      mainContainer.classList.add('flex');
-    }
-
-    function doLogin() {
-      const username = (usernameEl.value || '').trim();
-      const password = passwordEl.value || '';
-      if (username === 'poswel' && password === 'poswel0!') {
-        showMain();
-      } else {
-        errorMsg.style.display = 'block';
+    // Calendar (simple current month)
+    const calGrid = document.getElementById('cal-grid');
+    const calMonth = document.getElementById('cal-month');
+    function renderCalendar(d=new Date()){
+      calGrid.innerHTML='';
+      const y=d.getFullYear(), m=d.getMonth();
+      calMonth.textContent = `${y}년 ${m+1}월`;
+      const first = new Date(y,m,1); const last = new Date(y,m+1,0);
+      const offset = first.getDay();
+      for(let i=0;i<offset;i++){const c=document.createElement('div'); c.textContent=''; calGrid.appendChild(c);}
+      for(let day=1; day<=last.getDate(); day++){
+        const cell=document.createElement('div'); cell.textContent=day;
+        const today=new Date(); if(day===today.getDate()&&m===today.getMonth()&&y===today.getFullYear()) cell.classList.add('today');
+        calGrid.appendChild(cell);
       }
     }
-
-    if (loginBtn) loginBtn.addEventListener('click', doLogin);
-    [usernameEl, passwordEl].forEach(el => el.addEventListener('keydown', (e) => { if (e.key === 'Enter') doLogin(); }));
-
-    // 로그아웃: 즉시 로그인 화면 복귀 + 캐시/스토리지 정리
-    const logoutBtn = document.getElementById('logout-btn');
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', () => {
-        try { localStorage.removeItem('ps_logged_in'); sessionStorage.clear(); } catch (e) {}
-        // 안전하게 전체를 초기 렌더로 리로드
-        location.replace(location.origin + location.pathname);
-      });
-    }
+    renderCalendar();
+    document.getElementById('btn-today').addEventListener('click',()=>renderCalendar(new Date()));
+    document.getElementById('btn-add').addEventListener('click',()=>alert('일정 등록 폼은 추후 연결'));
   </script>
 </body>
 </html>
