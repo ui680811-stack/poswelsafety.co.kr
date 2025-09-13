@@ -32,9 +32,10 @@
     .tb-left{display:flex;gap:10px;align-items:center}
     .logo{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--brand),#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
     .tb-title{font-weight:700}
-    .tb-right{display:flex;align-items:center;gap:10px}
+    .tb-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+    .welcome{font-size:12px;color:#475569;line-height:1}
     .btn{border:1px solid var(--line);background:#fff;padding:6px 10px;border-radius:10px;cursor:pointer}
-    .logout{border:1px solid #1f2937;background:#111827;color:#fff}
+    .logout{border:1px solid #1f2937;background:#111827;color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;line-height:1}
 
     .sidebar{grid-column:1/2;grid-row:2/3;background:var(--sidebar);color:#e5e7eb;display:flex;flex-direction:column;align-items:center;padding:10px 8px;gap:8px}
     .nav-item{width:64px;height:64px;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:transparent;color:#cbd5e1;cursor:pointer;border:1px solid transparent}
@@ -100,8 +101,8 @@
         <div class="tb-title">안전보건관리체계 포털</div>
       </div>
       <div class="tb-right">
-        <button class="btn" id="btn-notify">알림</button>
-        <button class="btn logout" id="btn-logout">로그아웃</button>
+        <div class="welcome">'이단우' 님 환영합니다.</div>
+        <button class="logout" id="btn-logout">로그아웃</button>
       </div>
     </div>
 
@@ -211,92 +212,45 @@
   </div>
 
   <script>
-    // ===== 로그인 처리 (세션 유지 없음: 탭/창 종료 시 자동 로그아웃) =====
-    const L = document.getElementById('login-layer');
-    const A = document.getElementById('app');
-    const id = document.getElementById('id');
-    const pw = document.getElementById('pw');
-    const err = document.getElementById('err');
-    const btnLogin = document.getElementById('login');
-    const btnLogout = () => document.getElementById('btn-logout');
+    // ===== 로그인 처리 =====
+    const L=document.getElementById('login-layer');
+    const A=document.getElementById('app');
+    const id=document.getElementById('id');
+    const pw=document.getElementById('pw');
+    const err=document.getElementById('err');
 
-    function showApp(){ L.style.display='none'; A.style.display='grid'; }
-    function showLogin(){ A.style.display='none'; L.style.display='flex'; id.value=''; pw.value=''; err.style.display='none'; }
+    function showApp(){L.style.display='none';A.style.display='grid';}
+    function showLogin(){A.style.display='none';L.style.display='flex';id.value='';pw.value='';err.style.display='none';}
 
-    function doLogin(){
-      if(id.value.trim()==='poswel' && pw.value==='poswel'){
-        sessionStorage.setItem('signed','1'); // 세션 저장(탭/창 종료 시 자동 삭제)
+    document.getElementById('login').addEventListener('click',()=>{
+      if(id.value.trim()==='poswel'&&pw.value==='poswel'){
+        sessionStorage.setItem('signed','1');
         showApp();
-      }else{ err.style.display='block'; }
-    }
+      }else{err.style.display='block';}
+    });
+    [id,pw].forEach(el=>el.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('login').click();}));
+    if(sessionStorage.getItem('signed')==='1')showApp();
 
-    btnLogin.addEventListener('click', doLogin);
-    [id,pw].forEach(el=>el.addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); }));
-
-    // 세션 확인(새로고침 시)
-    if(sessionStorage.getItem('signed')==='1') showApp(); else showLogin();
-
-    // 로그아웃 버튼
-    document.addEventListener('click', (e)=>{
-      if(e.target && e.target.id==='btn-logout'){
-        try{ sessionStorage.removeItem('signed'); }catch(_){}
-        // 초기 화면으로 이동(해시 제거 포함)
-        history.replaceState(null,'', location.pathname);
-        showLogin();
-      }
+    document.getElementById('btn-logout').addEventListener('click',()=>{
+      sessionStorage.removeItem('signed');
+      history.replaceState(null,'',location.pathname);
+      showLogin();
     });
 
     // ===== 라우터 =====
-    const pages = {
-      home: document.getElementById('page-home'),
-      biz: document.getElementById('page-biz'),
-      work: document.getElementById('page-work'),
-      law: document.getElementById('page-law'),
-      counsel: document.getElementById('page-counsel'),
-      report: document.getElementById('page-report'),
-      data: document.getElementById('page-data'),
-    };
-    function go(page){
-      Object.values(pages).forEach(p=>p.classList.remove('active'));
-      pages[page].classList.add('active');
-      document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-      document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');
-      window.location.hash = page;
-    }
+    const pages={home:document.getElementById('page-home'),biz:document.getElementById('page-biz'),work:document.getElementById('page-work'),law:document.getElementById('page-law'),counsel:document.getElementById('page-counsel'),report:document.getElementById('page-report'),data:document.getElementById('page-data'),};
+    function go(page){Object.values(pages).forEach(p=>p.classList.remove('active'));pages[page].classList.add('active');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');window.location.hash=page;}
     document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>go(n.dataset.page)));
-    window.addEventListener('load',()=>{ const h=location.hash.replace('#',''); go(pages[h]?h:'home');})
+    window.addEventListener('load',()=>{const h=location.hash.replace('#','');go(pages[h]?h:'home');})
 
-    // KPI/타일 클릭 → 페이지 이동 매핑
-    document.querySelectorAll('.link').forEach(el=>{
-      el.addEventListener('click',()=>{
-        const target=(el.dataset.link||'').toLowerCase();
-        if(['조직','위원회','예산','경영방침','목표','관련조치'].includes(target)) go('biz');
-        else if(['문서함','도움업무'].includes(target)) go('report');
-        else go('home');
-      });
-    });
+    document.querySelectorAll('.link').forEach(el=>{el.addEventListener('click',()=>{const t=(el.dataset.link||'').toLowerCase();if(['조직','위원회','예산','경영방침','목표','관련조치'].includes(t))go('biz');else if(['문서함','도움업무'].includes(t))go('report');else go('home');});});
 
     // 달력
-    const calGrid=document.getElementById('cal-grid');
-    const calMonth=document.getElementById('cal-month');
-    function renderCalendar(d=new Date()){
-      calGrid.innerHTML='';
-      const y=d.getFullYear(), m=d.getMonth();
-      calMonth.textContent = `${y}년 ${m+1}월`;
-      const first=new Date(y,m,1), last=new Date(y,m+1,0); const offset=first.getDay();
-      for(let i=0;i<offset;i++){ const c=document.createElement('div'); c.textContent=''; calGrid.appendChild(c); }
-      for(let day=1; day<=last.getDate(); day++){
-        const cell=document.createElement('div'); cell.textContent=day;
-        const today=new Date(); if(day===today.getDate()&&m===today.getMonth()&&y===today.getFullYear()) cell.classList.add('today');
-        calGrid.appendChild(cell);
-      }
-    }
-    renderCalendar();
-    document.getElementById('btn-today').addEventListener('click',()=>renderCalendar(new Date()));
-    document.getElementById('btn-add').addEventListener('click',()=>alert('일정 등록 폼은 추후 연결'));
+    const calGrid=document.getElementById('cal-grid');const calMonth=document.getElementById('cal-month');
+    function renderCalendar(d=new Date()){calGrid.innerHTML='';const y=d.getFullYear(),m=d.getMonth();calMonth.textContent=`${y}년 ${m+1}월`;const first=new Date(y,m,1),last=new Date(y,m+1,0);const offset=first.getDay();for(let i=0;i<offset;i++){const c=document.createElement('div');c.textContent='';calGrid.appendChild(c);}for(let day=1;day<=last.getDate();day++){const cell=document.createElement('div');cell.textContent=day;const today=new Date();if(day===today.getDate()&&m===today.getMonth()&&y===today.getFullYear())cell.classList.add('today');calGrid.appendChild(cell);}}
+    renderCalendar();document.getElementById('btn-today').addEventListener('click',()=>renderCalendar(new Date()));document.getElementById('btn-add').addEventListener('click',()=>alert('일정 등록 폼은 추후 연결'));
 
-    // 창/탭 종료 시 자동 로그아웃(세션 스토리지 특성으로 충분하지만, 명시적 처리)
-    window.addEventListener('beforeunload',()=>{ try{ sessionStorage.removeItem('signed'); }catch(_){} });
+    window.addEventListener('beforeunload',()=>{try{sessionStorage.removeItem('signed');}catch(_){}});
   </script>
 </body>
 </html>
