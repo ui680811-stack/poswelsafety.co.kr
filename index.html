@@ -94,6 +94,18 @@
     .kpi-v{font-size:18px;font-weight:800;margin-top:4px}
     @media (max-width: 960px){.biz-grid{grid-template-columns:1fr}.kpi-row{grid-template-columns:repeat(2,1fr)}}
 
+    /* ===== 근로자 테이블 ===== */
+    .emp-wrap{margin-top:14px}
+    .emp-bar{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin:8px 0}
+    .emp-inputs{display:flex;gap:8px;flex-wrap:wrap}
+    .emp-inputs input, .emp-inputs select{padding:8px;border:1px solid var(--line);border-radius:8px;min-width:120px}
+    .btn-sm{padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:#fff;cursor:pointer}
+    .btn-pri{background:var(--brand);color:#fff;border:none}
+    .btn-danger{background:#ef4444;color:#fff;border:none}
+    table{width:100%;border-collapse:collapse}
+    th,td{border:1px solid var(--line);padding:8px;text-align:center;font-size:14px}
+    th{background:#f1f5f9}
+
     /* 페이지 표시/숨김 */
     .page{display:none}
     .page.active{display:block}
@@ -131,7 +143,7 @@
     <!-- 사이드바 -->
     <aside class="sidebar">
       <div class="nav-item active" data-page="home" title="메인"><div class="nav-ico">🏠</div><div class="nav-t">메인</div></div>
-      <div class="nav-item" data-page="biz" title="사업장 관리"><div class="nav-ico">🏭</div><div class="nav-t">사업장</div></div>
+      <div class="nav-item" data-page="biz" title="사업장 관리"><div class="nav-ico">🏭</div><div class="nav-t">사업장 관리</div></div>
       <div class="nav-item" data-page="work" title="작업 관리"><div class="nav-ico">🛠️</div><div class="nav-t">작업</div></div>
       <div class="nav-item" data-page="law" title="산업안전보건법"><div class="nav-ico">📚</div><div class="nav-t">법령</div></div>
       <div class="nav-item" data-page="counsel" title="안전문답/게시판"><div class="nav-ico">💬</div><div class="nav-t">문답</div></div>
@@ -170,7 +182,7 @@
             </div>
           </div>
           <div class="card">
-            <div class="cal-header"><strong>일정</strong><div><button class="btn" id="btn-today">오늘</button><button class="btn" id="btn-add">+ 일정 등록하기</button></div></div>
+            <div class="cal-header"><strong>일정</strong><div><button class="btn-sm" id="btn-today">오늘</button><button class="btn-sm" id="btn-add">+ 일정 등록하기</button></div></div>
             <div style="font-size:12px;color:#475569;margin-bottom:6px" id="cal-month"></div>
             <div class="cal-grid" id="cal-grid"></div>
           </div>
@@ -193,6 +205,7 @@
             </div>
           </div>
         </div>
+
         <div class="biz-grid">
           <div class="card"><h3>기본 정보</h3>
             <div class="info-list">
@@ -213,14 +226,52 @@
             </div>
           </div>
         </div>
-        <div class="section">
-          <div class="section-head"><strong>부서 및 근로자 정보</strong><a class="btn" href="#">부서 및 근로자 정보 보기 〉</a></div>
-          <div class="kpi-row">
-            <div class="kpi-tile"><div class="kpi-t">결재 요청</div><div class="kpi-v">0건</div></div>
-            <div class="kpi-tile"><div class="kpi-t">부서</div><div class="kpi-v">0개</div></div>
-            <div class="kpi-tile"><div class="kpi-t">안전보건담당자</div><div class="kpi-v">0명</div></div>
-            <div class="kpi-tile"><div class="kpi-t">근로자</div><div class="kpi-v">3명</div></div>
+
+        <div class="section card">
+          <div class="section-head">
+            <strong>부서 및 근로자 정보</strong>
+            <button id="openEmpPanel" class="btn-sm">부서 및 근로자 정보 보기 〉</button>
           </div>
+
+          <!-- 근로자 패널 -->
+          <div id="empPanel" class="emp-wrap" style="display:none">
+            <div class="section-head">
+              <h3 style="margin:0">근로자 정보 추가</h3>
+              <div class="emp-bar">
+                <button id="selDeleteBtn" class="btn-danger">선택삭제</button>
+              </div>
+            </div>
+            <div class="emp-inputs" style="margin-bottom:8px">
+              <input id="empNo" placeholder="직번(6자리 숫자)" />
+              <input id="empName" placeholder="이름(2~4자)" />
+              <select id="empDept">
+                <option value="">부서 선택</option>
+                <option>경영지원그룹</option>
+                <option>안전행정섹션</option>
+                <option>재무기획섹션</option>
+                <option>CS사업그룹</option>
+                <option>FS사업그룹</option>
+              </select>
+              <input id="empRank" placeholder="직급(한글만)" />
+              <button id="addEmpBtn" class="btn-pri">추가</button>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:44px"><input type="checkbox" id="checkAll" /></th>
+                    <th>직번</th>
+                    <th>이름</th>
+                    <th>부서</th>
+                    <th>직급</th>
+                  </tr>
+                </thead>
+                <tbody id="empTbody"></tbody>
+              </table>
+            </div>
+          </div>
+          <!-- /근로자 패널 -->
         </div>
       </section>
 
@@ -261,6 +312,97 @@
     const todayBtn=document.getElementById('btn-today'); const addBtn=document.getElementById('btn-add');
     if(todayBtn) todayBtn.addEventListener('click',()=>renderCalendar(new Date()));
     if(addBtn) addBtn.addEventListener('click',()=>alert('일정 등록 폼은 추후 연결'));
+
+    // ===== 근로자 관리(사업장 관리 내) =====
+    const openEmpPanel=document.getElementById('openEmpPanel');
+    const empPanel=document.getElementById('empPanel');
+    const empTbody=document.getElementById('empTbody');
+    const addEmpBtn=document.getElementById('addEmpBtn');
+    const selDeleteBtn=document.getElementById('selDeleteBtn');
+    const checkAll=document.getElementById('checkAll');
+
+    // 저장 키 (관리자=poswel 전용). 기존 'employees' 키를 쓰던 데이터가 있으면 마이그레이션
+    const EMP_KEY = 'employees_poswel';
+    (function migrateEmployees(){
+      try{
+        const old = localStorage.getItem('employees');
+        if(old && !localStorage.getItem(EMP_KEY)){
+          localStorage.setItem(EMP_KEY, old);
+        }
+      }catch(e){}
+    })();
+
+    function getEmployees(){
+      try { return JSON.parse(localStorage.getItem(EMP_KEY)||'[]'); } catch(e){ return []; }
+    }
+    function setEmployees(list){ localStorage.setItem(EMP_KEY, JSON.stringify(list)); }
+
+    function renderEmp(){
+      const list = getEmployees();
+      empTbody.innerHTML = '';
+      list.forEach((emp, idx)=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML = `
+          <td><input type="checkbox" class="emp-check" data-index="${idx}"></td>
+          <td>${emp.no}</td>
+          <td>${emp.name}</td>
+          <td>${emp.dept}</td>
+          <td>${emp.rank}</td>`;
+        empTbody.appendChild(tr);
+      });
+      checkAll.checked=false;
+    }
+
+    // 패널 토글 (펼치기/접기) — 버튼 라벨은 항상 동일하게 유지
+    function togglePanel(){
+      const isHidden = empPanel.style.display==='none' || empPanel.style.display==='';
+      empPanel.style.display = isHidden ? 'block' : 'none';
+      if(isHidden) renderEmp();
+      openEmpPanel.textContent='부서 및 근로자 정보 보기 〉';
+    }
+    openEmpPanel.addEventListener('click', togglePanel);
+
+    // 입력검증 + 추가
+    addEmpBtn.addEventListener('click', ()=>{
+      const no=document.getElementById('empNo').value.trim();
+      const name=document.getElementById('empName').value.trim();
+      const dept=document.getElementById('empDept').value;
+      const rank=document.getElementById('empRank').value.trim();
+
+      if(!/^\d{6}$/.test(no)) { alert('직번은 6자리 숫자여야 합니다.'); return; }
+      if(name.length<2 || name.length>4) { alert('이름은 2~4글자여야 합니다.'); return; }
+      if(!dept) { alert('부서를 선택하세요.'); return; }
+      if(!/^[가-힣]+$/.test(rank)) { alert('정확한 정보를 입력해주세요'); return; }
+
+      const list=getEmployees();
+      list.push({no,name,dept,rank});
+      setEmployees(list);
+      ['empNo','empName','empRank'].forEach(i=>document.getElementById(i).value='');
+      document.getElementById('empDept').value='';
+      renderEmp();
+    });
+
+    // 선택삭제 (체크된 항목만 삭제)
+    selDeleteBtn.addEventListener('click', ()=>{
+      const checks=[...document.querySelectorAll('.emp-check:checked')];
+      if(checks.length===0){ alert('삭제할 근로자를 선택하세요.'); return; }
+      if(!confirm('선택한 근로자를 삭제할까요?')) return;
+      const toDelIdx = new Set(checks.map(c=>parseInt(c.dataset.index)));
+      const list=getEmployees().filter((_,i)=>!toDelIdx.has(i));
+      setEmployees(list);
+      renderEmp();
+    });
+
+    // 전체 체크박스 동기화
+    checkAll.addEventListener('change', ()=>{
+      document.querySelectorAll('.emp-check').forEach(c=>c.checked = checkAll.checked);
+    });
+    empTbody.addEventListener('change', (e)=>{
+      if(e.target && e.target.classList.contains('emp-check')){
+        const boxes=[...document.querySelectorAll('.emp-check')];
+        checkAll.checked = boxes.length>0 && boxes.every(b=>b.checked);
+      }
+    });
   </script>
 </body>
 </html>
