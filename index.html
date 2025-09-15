@@ -12,8 +12,18 @@
       --bg:#f6f7fb; --card:#fff; --text:#111827; --muted:#6b7280; --line:#e5e7eb;
       --brand:#2f6ae0; --brand-100:#e7efff; --sidebar:#0f172a; --ok:#22c55e; --warn:#f59e0b; --danger:#ef4444; --radius:16px;
     }
+
+    /* ===== 폰트: 업로드한 NanumGothic 사용 ===== */
+    @font-face{
+      font-family:'NanumGothic';
+      src: local('NanumGothic'), url('NanumGothic.otf') format('opentype');
+      font-weight: 300 800;
+      font-style: normal;
+      font-display: swap;
+    }
+
     *{box-sizing:border-box}
-    body{margin:0;font-family:"Malgun Gothic","Apple SD Gothic Neo",system-ui,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    body{margin:0;font-family:"NanumGothic","Malgun Gothic","Apple SD Gothic Neo",system-ui,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
     a{color:inherit;text-decoration:none}
 
     /* ===== 로그인 레이어 ===== */
@@ -110,6 +120,27 @@
     .page{display:none}
     .page.active{display:block}
     .link{cursor:pointer}
+
+    /* ===== 작업관리 리스트 ===== */
+    .work-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+    .work-item{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fbfdff}
+    .work-item:hover{background:#f8fafc}
+
+    /* ===== 법령 링크 ===== */
+    .law-list{display:grid;gap:8px}
+    .law-list a{display:block;border:1px solid var(--line);padding:10px;border-radius:10px;background:#fbfdff}
+    .law-list a:hover{background:#eef2ff}
+
+    /* ===== 소통게시판 ===== */
+    .board-wrap{display:grid;gap:12px}
+    .board-form{display:grid;gap:8px}
+    .board-form input, .board-form textarea{padding:10px;border:1px solid var(--line);border-radius:10px}
+    .board-list{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+    .board-row{display:grid;grid-template-columns:1fr 120px 100px;gap:8px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line)}
+    .board-row.header{background:#f1f5f9;font-weight:700}
+    .board-row:last-child{border-bottom:none}
+    .board-actions{display:flex;gap:6px;justify-content:flex-end}
+    .tag{display:inline-flex;align-items:center;gap:6px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);font-size:12px;color:#475569;background:#fff}
   </style>
 </head>
 <body>
@@ -146,7 +177,7 @@
       <div class="nav-item" data-page="biz" title="사업장 관리"><div class="nav-ico">🏭</div><div class="nav-t">사업장 관리</div></div>
       <div class="nav-item" data-page="work" title="작업 관리"><div class="nav-ico">🛠️</div><div class="nav-t">작업</div></div>
       <div class="nav-item" data-page="law" title="산업안전보건법"><div class="nav-ico">📚</div><div class="nav-t">법령</div></div>
-      <div class="nav-item" data-page="counsel" title="안전문답/게시판"><div class="nav-ico">💬</div><div class="nav-t">문답</div></div>
+      <div class="nav-item" data-page="counsel" title="소통게시판"><div class="nav-ico">💬</div><div class="nav-t">소통게시판</div></div>
       <div class="nav-item" data-page="report" title="컨설팅 보고서"><div class="nav-ico">📄</div><div class="nav-t">보고서</div></div>
       <div class="nav-item" data-page="data" title="데이터센터"><div class="nav-ico">📊</div><div class="nav-t">데이터</div></div>
     </aside>
@@ -197,7 +228,7 @@
             <div class="biz-avatar">IMG</div>
             <div class="biz-title">
               <div class="name">포스웰 <span class="no">[10018210]</span></div>
-              <div class="muted">법인명(단체명): (사)새마을복지회</div>
+              <div class="muted">법인명(단체명): 제철복지회</div>
             </div>
             <div class="biz-actions">
               <button class="btn">스마트 보고서 인증 현황</button>
@@ -209,11 +240,11 @@
         <div class="biz-grid">
           <div class="card"><h3>기본 정보</h3>
             <div class="info-list">
-              <div class="info-row"><div class="icon">👤</div><div><strong>대표</strong> 김삼락</div></div>
+              <div class="info-row"><div class="icon">👤</div><div><strong>대표</strong> 김상락</div></div>
               <div class="info-row"><div class="icon">👥</div><div><strong>근로자수</strong> 100명</div></div>
               <div class="info-row"><div class="icon">📞</div><div>054-221-9145</div></div>
               <div class="info-row"><div class="icon">📠</div><div>054-221-9199</div></div>
-              <div class="info-row"><div class="icon">📍</div><div>경상북도 포항시 남구 평보길 21(대잠동) 포스웰</div></div>
+              <div class="info-row"><div class="icon">📍</div><div>경상북도 포항시 남구 행복길 21(대잠동) 포스웰</div></div>
               <div class="info-row"><div class="icon">🧾</div><div>사업자등록번호 506-82-02496 <a href="#" class="muted">(통신판매업)</a></div></div>
             </div>
           </div>
@@ -275,10 +306,70 @@
         </div>
       </section>
 
-      <!-- ===== 나머지 페이지(간단 템플릿) ===== -->
-      <section id="page-work" class="page"><div class="card"><h3>작업 관리</h3><p>작업/공정, 허가서 등을 관리합니다.</p></div></section>
-      <section id="page-law" class="page"><div class="card"><h3>산업안전보건법</h3><p>관련 법령/지침 링크를 구성합니다.</p></div></section>
-      <section id="page-counsel" class="page"><div class="card"><h3>안전문답/게시판</h3><p>Q&A 및 공지 게시판.</p></div></section>
+      <!-- ===== 작업 관리 ===== -->
+      <section id="page-work" class="page">
+        <div class="card">
+          <h3>작업 관리</h3>
+          <p class="muted" style="margin:8px 0 12px">작업/공정, 허가서 등을 관리합니다.</p>
+          <div class="work-list" id="workList">
+            <div class="work-item" data-work="TBM">1. TBM</div>
+            <div class="work-item" data-work="위험성평가">2. 위험성평가</div>
+            <div class="work-item" data-work="안전보건교육">3. 안전보건교육</div>
+            <div class="work-item" data-work="MSDS">4. MSDS</div>
+            <div class="work-item" data-work="작업표준서">5. 작업표준서</div>
+            <div class="work-item" data-work="외주업체 작업">6. 외주업체 작업</div>
+          </div>
+          <div class="note" id="workHint" style="margin-top:10px">항목을 클릭하면 안내 메시지가 표시됩니다. 필요 시 상세 페이지로 확장 가능합니다.</div>
+        </div>
+      </section>
+
+      <!-- ===== 법령 ===== -->
+      <section id="page-law" class="page">
+        <div class="card">
+          <h3>산업안전보건 법령 링크</h3>
+          <div class="law-list">
+            <a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%A4%91%EB%8C%80%EC%9E%AC%ED%95%B4%EC%B2%98%EB%B2%8C%EB%B2%95" target="_blank" rel="noopener">1. 중대재해 처벌법</a>
+            <a href="https://www.law.go.kr/LSW//lsSc.do?section=&menuId=1&subMenuId=15&tabMenuId=81&eventGubun=060101&query=%EC%82%B0%EC%97%85%EC%95%88%EC%A0%84%EB%B3%B4%EA%B1%B4%EB%B2%95#liBgcolor2" target="_blank" rel="noopener">2. 산업안전보건법</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 소통게시판 ===== -->
+      <section id="page-counsel" class="page">
+        <div class="card">
+          <h3>소통게시판 (익명 · 비밀번호 기반)</h3>
+          <div class="tag">제목/본문만 등록 · 수정/삭제 시 개인 비밀번호 필요</div>
+          <div class="section" style="margin-top:12px">
+            <div class="board-wrap">
+              <div class="board-form">
+                <input id="postTitle" placeholder="제목" />
+                <textarea id="postBody" rows="4" placeholder="본문"></textarea>
+                <input id="postPw" type="password" placeholder="개인 비밀번호 (수정·삭제에 필요)" />
+                <button id="postCreate" class="btn-pri" style="width:120px">등록</button>
+              </div>
+
+              <div class="board-list" id="boardList">
+                <div class="board-row header"><div>제목</div><div>작성일</div><div style="text-align:right">동작</div></div>
+                <!-- rows here -->
+              </div>
+
+              <div id="boardDetail" class="card" style="display:none">
+                <h3 id="detailTitle">제목</h3>
+                <p id="detailMeta" class="muted" style="margin-top:4px">익명 · <span id="detailDate"></span></p>
+                <div id="detailBody" style="white-space:pre-wrap;margin-top:10px"></div>
+                <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
+                  <button id="btnEdit" class="btn-sm">수정</button>
+                  <button id="btnDelete" class="btn-danger btn-sm">삭제</button>
+                  <button id="btnBack" class="btn-sm">목록</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 기타 ===== -->
       <section id="page-report" class="page"><div class="card"><h3>컨설팅 보고서</h3><p>보고서 업로드/다운로드.</p></div></section>
       <section id="page-data" class="page"><div class="card"><h3>데이터센터</h3><p>지표/통계 대시보드.</p></div></section>
     </main>
@@ -305,7 +396,7 @@
     document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>go(n.dataset.page)));
     window.addEventListener('load',()=>{ const h=location.hash.replace('#',''); go(pages[h]?h:'home'); });
 
-    // 홈 화면 달력
+    // ===== 홈 화면 달력 =====
     const calGrid=document.getElementById('cal-grid'); const calMonth=document.getElementById('cal-month');
     function renderCalendar(d=new Date()){ if(!calGrid) return; calGrid.innerHTML=''; const y=d.getFullYear(), m=d.getMonth(); calMonth.textContent=`${y}년 ${m+1}월`; const first=new Date(y,m,1), last=new Date(y,m+1,0); const offset=first.getDay(); for(let i=0;i<offset;i++){const c=document.createElement('div'); calGrid.appendChild(c);} for(let day=1; day<=last.getDate(); day++){ const cell=document.createElement('div'); cell.textContent=day; const today=new Date(); if(day===today.getDate()&&m===today.getMonth()&&y===today.getFullYear()) cell.classList.add('today'); calGrid.appendChild(cell);} }
     renderCalendar();
@@ -403,6 +494,126 @@
         checkAll.checked = boxes.length>0 && boxes.every(b=>b.checked);
       }
     });
+
+    // ===== 작업 항목 안내 =====
+    const workList = document.getElementById('workList');
+    if(workList){
+      workList.addEventListener('click',(e)=>{
+        const item = e.target.closest('.work-item');
+        if(!item) return;
+        const name = item.getAttribute('data-work');
+        alert(`${name} 모듈은 이후 상세 화면으로 확장 가능합니다.`);
+      });
+    }
+
+    // ===== 소통게시판 (익명·비밀번호) =====
+    const BOARD_KEY = 'anon_board_posts_v1';
+    const boardListEl = document.getElementById('boardList');
+    const postTitle = document.getElementById('postTitle');
+    const postBody = document.getElementById('postBody');
+    const postPw = document.getElementById('postPw');
+    const postCreate = document.getElementById('postCreate');
+    const detailBox = document.getElementById('boardDetail');
+    const dTitle = document.getElementById('detailTitle');
+    const dDate = document.getElementById('detailDate');
+    const dBody = document.getElementById('detailBody');
+    const btnEdit = document.getElementById('btnEdit');
+    const btnDelete = document.getElementById('btnDelete');
+    const btnBack = document.getElementById('btnBack');
+
+    function getPosts(){
+      try{ return JSON.parse(localStorage.getItem(BOARD_KEY)||'[]'); }catch(e){ return []; }
+    }
+    function setPosts(list){ localStorage.setItem(BOARD_KEY, JSON.stringify(list)); }
+
+    function fmtDate(ts){ const d=new Date(ts); const z=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())} ${z(d.getHours())}:${z(d.getMinutes())}`; }
+
+    async function sha256Hex(str){
+      const enc = new TextEncoder();
+      const buf = await crypto.subtle.digest('SHA-256', enc.encode(str));
+      return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+
+    function renderBoard(){
+      const list = getPosts().sort((a,b)=>b.createdAt-a.createdAt);
+      // 헤더 다음 행부터 제거
+      [...boardListEl.querySelectorAll('.board-row:not(.header)')].forEach(n=>n.remove());
+      list.forEach(p=>{
+        const row = document.createElement('div');
+        row.className='board-row';
+        row.innerHTML = `<div>${p.title}</div><div>${fmtDate(p.createdAt)}</div><div class="board-actions"><button class="btn-sm" data-act="view" data-id="${p.id}">보기</button></div>`;
+        boardListEl.appendChild(row);
+      });
+      detailBox.style.display='none';
+    }
+
+    function viewPost(id){
+      const p = getPosts().find(x=>x.id===id);
+      if(!p) return;
+      dTitle.textContent = p.title;
+      dDate.textContent = fmtDate(p.createdAt);
+      dBody.textContent = p.body;
+      detailBox.dataset.id = id;
+      detailBox.style.display='block';
+      detailBox.scrollIntoView({behavior:'smooth',block:'center'});
+    }
+
+    async function createPost(){
+      const title = postTitle.value.trim();
+      const body = postBody.value.trim();
+      const pw = postPw.value;
+      if(!title || !body || !pw){ alert('제목, 본문, 비밀번호를 모두 입력하세요.'); return; }
+      const hash = await sha256Hex(pw);
+      const list = getPosts();
+      const id = 'p'+Date.now();
+      list.push({id, title, body, pwHash: hash, createdAt: Date.now()});
+      setPosts(list);
+      postTitle.value = ''; postBody.value=''; postPw.value='';
+      renderBoard();
+    }
+
+    async function verifyAndEdit(){
+      const id = detailBox.dataset.id; if(!id) return;
+      const list = getPosts();
+      const ix = list.findIndex(p=>p.id===id); if(ix<0) return;
+      const inputPw = prompt('수정을 위해 비밀번호를 입력하세요.'); if(inputPw===null) return;
+      const ok = (await sha256Hex(inputPw)) === list[ix].pwHash;
+      if(!ok){ alert('비밀번호가 일치하지 않습니다.'); return; }
+      const newTitle = prompt('새 제목을 입력하세요.', list[ix].title) ?? list[ix].title;
+      const newBody = prompt('새 본문을 입력하세요.', list[ix].body) ?? list[ix].body;
+      list[ix].title = newTitle.trim();
+      list[ix].body = newBody.trim();
+      setPosts(list);
+      viewPost(id);
+      renderBoard();
+    }
+
+    async function verifyAndDelete(){
+      const id = detailBox.dataset.id; if(!id) return;
+      const list = getPosts();
+      const ix = list.findIndex(p=>p.id===id); if(ix<0) return;
+      const inputPw = prompt('삭제를 위해 비밀번호를 입력하세요.'); if(inputPw===null) return;
+      const ok = (await sha256Hex(inputPw)) === list[ix].pwHash;
+      if(!ok){ alert('비밀번호가 일치하지 않습니다.'); return; }
+      if(!confirm('정말 삭제하시겠습니까?')) return;
+      list.splice(ix,1);
+      setPosts(list);
+      detailBox.style.display='none';
+      renderBoard();
+    }
+
+    // 이벤트 바인딩
+    if(postCreate) postCreate.addEventListener('click', createPost);
+    if(boardListEl) boardListEl.addEventListener('click', e=>{
+      const btn = e.target.closest('button[data-act="view"]');
+      if(btn){ viewPost(btn.dataset.id); }
+    });
+    if(btnEdit) btnEdit.addEventListener('click', verifyAndEdit);
+    if(btnDelete) btnDelete.addEventListener('click', verifyAndDelete);
+    if(btnBack) btnBack.addEventListener('click', ()=>{ detailBox.style.display='none'; });
+
+    // 초기 렌더
+    renderBoard();
   </script>
 </body>
 </html>
