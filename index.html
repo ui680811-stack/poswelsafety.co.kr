@@ -140,7 +140,6 @@
     .board-row.header{background:#f1f5f9;font-weight:700}
     .board-row:last-child{border-bottom:none}
     .board-actions{display:flex;gap:6px;justify-content:flex-end}
-    .tag{display:inline-flex;align-items:center;gap:6px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);font-size:12px;color:#475569;background:#fff}
   </style>
 </head>
 <body>
@@ -175,11 +174,11 @@
     <aside class="sidebar">
       <div class="nav-item active" data-page="home" title="메인"><div class="nav-ico">🏠</div><div class="nav-t">메인</div></div>
       <div class="nav-item" data-page="biz" title="사업장 관리"><div class="nav-ico">🏭</div><div class="nav-t">사업장 관리</div></div>
-      <div class="nav-item" data-page="work" title="작업 관리"><div class="nav-ico">🛠️</div><div class="nav-t">작업</div></div>
+      <div class="nav-item" data-page="work" title="작업관리"><div class="nav-ico">🛠️</div><div class="nav-t">작업관리</div></div>
       <div class="nav-item" data-page="law" title="산업안전보건법"><div class="nav-ico">📚</div><div class="nav-t">법령</div></div>
       <div class="nav-item" data-page="counsel" title="소통게시판"><div class="nav-ico">💬</div><div class="nav-t">소통게시판</div></div>
       <div class="nav-item" data-page="report" title="컨설팅 보고서"><div class="nav-ico">📄</div><div class="nav-t">보고서</div></div>
-      <div class="nav-item" data-page="data" title="데이터센터"><div class="nav-ico">📊</div><div class="nav-t">데이터</div></div>
+      <div class="nav-item" data-page="data" title="안전사고 통계"><div class="nav-ico">📊</div><div class="nav-t">데이터</div></div>
     </aside>
 
     <!-- 메인 콘텐츠 -->
@@ -306,10 +305,10 @@
         </div>
       </section>
 
-      <!-- ===== 작업 관리 ===== -->
+      <!-- ===== 작업관리 ===== -->
       <section id="page-work" class="page">
         <div class="card">
-          <h3>작업 관리</h3>
+          <h3>작업관리</h3>
           <p class="muted" style="margin:8px 0 12px">작업/공정, 허가서 등을 관리합니다.</p>
           <div class="work-list" id="workList">
             <div class="work-item" data-work="TBM">1. TBM</div>
@@ -319,17 +318,19 @@
             <div class="work-item" data-work="작업표준서">5. 작업표준서</div>
             <div class="work-item" data-work="외주업체 작업">6. 외주업체 작업</div>
           </div>
-          <div class="note" id="workHint" style="margin-top:10px">항목을 클릭하면 안내 메시지가 표시됩니다. 필요 시 상세 페이지로 확장 가능합니다.</div>
+          <div class="note" id="workHint" style="margin-top:10px">항목을 클릭하면 새 창에서 첨부·열람 페이지가 열립니다.</div>
         </div>
       </section>
 
       <!-- ===== 법령 ===== -->
       <section id="page-law" class="page">
         <div class="card">
-          <h3>산업안전보건 법령 링크</h3>
+          <h3>법령 링크</h3>
           <div class="law-list">
             <a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%A4%91%EB%8C%80%EC%9E%AC%ED%95%B4%EC%B2%98%EB%B2%8C%EB%B2%95" target="_blank" rel="noopener">1. 중대재해 처벌법</a>
             <a href="https://www.law.go.kr/LSW//lsSc.do?section=&menuId=1&subMenuId=15&tabMenuId=81&eventGubun=060101&query=%EC%82%B0%EC%97%85%EC%95%88%EC%A0%84%EB%B3%B4%EA%B1%B4%EB%B2%95#liBgcolor2" target="_blank" rel="noopener">2. 산업안전보건법</a>
+            <a href="https://law.go.kr/LSW//lsSc.do?section=&menuId=1&subMenuId=15&tabMenuId=81&eventGubun=060101&query=%EC%82%B0%EC%97%85%EC%95%88%EC%A0%84%EB%B3%B4%EA%B1%B4%EB%B2%95+%EC%8B%9C%ED%96%89%EB%A0%B9#undefined" target="_blank" rel="noopener">3. 산업안전보건법 시행령</a>
+            <a href="https://law.go.kr/LSW//lsSc.do?section=&menuId=1&subMenuId=15&tabMenuId=81&eventGubun=060101&query=%EC%82%B0%EC%97%85%EC%95%88%EC%A0%84%EB%B3%B4%EA%B1%B4%EB%B2%95+%EC%8B%9C%ED%96%89%EB%A0%B9#undefined" target="_blank" rel="noopener">4. 산업안전보건법 시행규칙</a>
           </div>
         </div>
       </section>
@@ -337,11 +338,13 @@
       <!-- ===== 소통게시판 ===== -->
       <section id="page-counsel" class="page">
         <div class="card">
-          <h3>소통게시판 (익명 · 비밀번호 기반)</h3>
-          <div class="tag">제목/본문만 등록 · 수정/삭제 시 개인 비밀번호 필요</div>
+          <h3>소통게시판</h3>
+          <div style="display:flex;gap:8px;margin-bottom:8px">
+            <button id="toggleWriter" class="btn-sm">글작성</button>
+          </div>
           <div class="section" style="margin-top:12px">
             <div class="board-wrap">
-              <div class="board-form">
+              <div class="board-form" id="boardForm" style="display:none">
                 <input id="postTitle" placeholder="제목" />
                 <textarea id="postBody" rows="4" placeholder="본문"></textarea>
                 <input id="postPw" type="password" placeholder="개인 비밀번호 (수정·삭제에 필요)" />
@@ -371,7 +374,52 @@
 
       <!-- ===== 기타 ===== -->
       <section id="page-report" class="page"><div class="card"><h3>컨설팅 보고서</h3><p>보고서 업로드/다운로드.</p></div></section>
-      <section id="page-data" class="page"><div class="card"><h3>데이터센터</h3><p>지표/통계 대시보드.</p></div></section>
+
+      <!-- ===== 안전사고 통계 ===== -->
+      <section id="page-data" class="page">
+        <div class="card">
+          <h3>안전사고 통계</h3>
+          <p class="muted" style="margin:8px 0 12px">사고 데이터를 입력·열람합니다.</p>
+          <div class="table-wrap" style="margin-bottom:10px">
+            <table>
+              <thead>
+                <tr>
+                  <th>번호</th>
+                  <th>일시</th>
+                  <th>지역</th>
+                  <th>사업장</th>
+                  <th>사번</th>
+                  <th>이름</th>
+                  <th>재해 유형</th>
+                  <th>사고 내용</th>
+                  <th>조치 결과</th>
+                  <th>요양 기간</th>
+                  <th>증빙자료</th>
+                </tr>
+              </thead>
+              <tbody id="accBody"></tbody>
+            </table>
+          </div>
+
+          <div class="card" style="margin-top:10px">
+            <h3 style="margin-top:0">신규 입력</h3>
+            <div class="emp-inputs">
+              <input id="accDate" placeholder="일시 (예: 2025-09-15 14:30)"/>
+              <input id="accRegion" placeholder="지역"/>
+              <input id="accBiz" placeholder="사업장"/>
+              <input id="accNo" placeholder="사번"/>
+              <input id="accName" placeholder="이름"/>
+              <input id="accType" placeholder="재해 유형"/>
+              <input id="accDesc" placeholder="사고 내용"/>
+              <input id="accAction" placeholder="조치 결과"/>
+              <input id="accDays" placeholder="요양 기간(일)"/>
+              <input id="accProof" type="file" accept=".pdf,.jpg,.png" multiple style="display:none"/>
+              <button id="accProofBtn" class="btn-sm">증빙자료</button>
+              <button id="accAdd" class="btn-pri">추가</button>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 
@@ -495,14 +543,56 @@
       }
     });
 
-    // ===== 작업 항목 안내 =====
+    // ===== 작업관리: 새 창(탭) 업로드/열람 뷰 =====
     const workList = document.getElementById('workList');
+    function openWorkWindow(type){
+      const w = window.open('', '_blank');
+      if(!w){ alert('팝업이 차단되었습니다. 허용해 주세요.'); return; }
+      w.document.write(`<!DOCTYPE html><html lang=ko><head><meta charset=utf-8><meta name=viewport content=\"width=device-width,initial-scale=1\"/><title>${type}</title>
+        <style>body{font-family: NanumGothic, 'Malgun Gothic', Arial, sans-serif; margin:0; background:#f6f7fb; color:#111827}
+        .wrap{max-width:960px;margin:24px auto;padding:16px}
+        .card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px}
+        .row{display:grid;gap:8px;margin:10px 0}
+        input,textarea{padding:10px;border:1px solid #e5e7eb;border-radius:8px}
+        .btn{padding:8px 12px;border-radius:8px;border:1px solid #e5e7eb;background:#2f6ae0;color:#fff;cursor:pointer}
+        table{width:100%;border-collapse:collapse;margin-top:12px}
+        th,td{border:1px solid #e5e7eb;padding:8px;text-align:center}
+        th{background:#f1f5f9}
+        </style></head><body>
+        <div class=wrap>
+          <h2 style=\"margin:0 0 12px\">${type} 문서 업로드/열람</h2>
+          <div class=card>
+            <div class=row>
+              <input id=fileInput type=file accept=\".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.png,.csv,.txt\" />
+              <button id=btnUpload class=btn>업로드</button>
+            </div>
+            <table><thead><tr><th>번호</th><th>파일명</th><th>업로드일시</th><th>보기</th></tr></thead><tbody id=listBody></tbody></table>
+          </div>
+        </div>
+        <script>
+          const TYPE = ${'"'}${'${type}'}${'"'};
+          const STORAGE_KEY = 'work_files_'+TYPE;
+          function getList(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')}catch(e){return []}}
+          function setList(v){localStorage.setItem(STORAGE_KEY, JSON.stringify(v))}
+          function z(n){return String(n).padStart(2,'0')}
+          function fmt(ts){const d=new Date(ts);return \`${'${'}d.getFullYear()}-${'${'}z(d.getMonth()+1)}-${'${'}z(d.getDate())} ${'${'}z(d.getHours())}:${'${'}z(d.getMinutes())}\`}
+          function render(){const tb=document.getElementById('listBody');tb.innerHTML='';getList().forEach((f,i)=>{const tr=document.createElement('tr');tr.innerHTML=\`<td>${'${'}i+1}</td><td>${'${'}f.name}</td><td>${'${'}fmt(f.ts)}</td><td><a href=\\\"${'${'}f.url}\\\" target=\\\"_blank\\\">열람</a></td>\`;tb.appendChild(tr)})}
+          document.getElementById('btnUpload').addEventListener('click',()=>{
+            const input=document.getElementById('fileInput');
+            const file=input.files&&input.files[0]; if(!file){alert('파일을 선택하세요.'); return}
+            const url=URL.createObjectURL(file);
+            const list=getList(); list.unshift({name:file.name, url, ts:Date.now()}); setList(list); render(); input.value='';
+          });
+          render();
+        <\/script></body></html>`);
+      w.document.close();
+    }
     if(workList){
       workList.addEventListener('click',(e)=>{
         const item = e.target.closest('.work-item');
         if(!item) return;
         const name = item.getAttribute('data-work');
-        alert(`${name} 모듈은 이후 상세 화면으로 확장 가능합니다.`);
+        openWorkWindow(name);
       });
     }
 
@@ -603,6 +693,15 @@
     }
 
     // 이벤트 바인딩
+    const toggleWriterBtn = document.getElementById('toggleWriter');
+    const boardForm = document.getElementById('boardForm');
+    if(toggleWriterBtn){
+      toggleWriterBtn.addEventListener('click',()=>{
+        const vis = boardForm.style.display==='none' || boardForm.style.display==='';
+        boardForm.style.display = vis ? 'block' : 'none';
+        toggleWriterBtn.textContent = vis ? '작성 창 닫기' : '글작성';
+      });
+    }
     if(postCreate) postCreate.addEventListener('click', createPost);
     if(boardListEl) boardListEl.addEventListener('click', e=>{
       const btn = e.target.closest('button[data-act="view"]');
@@ -614,6 +713,37 @@
 
     // 초기 렌더
     renderBoard();
+
+    // ===== 안전사고 통계 =====
+    const ACC_KEY='accidents_v1';
+    function getAcc(){ try{return JSON.parse(localStorage.getItem(ACC_KEY)||'[]')}catch(e){return[]} }
+    function setAcc(v){ localStorage.setItem(ACC_KEY, JSON.stringify(v)) }
+    function renderAcc(){
+      const tb=document.getElementById('accBody'); if(!tb) return; tb.innerHTML='';
+      getAcc().map((r,i)=>({...r,idx:i+1})).forEach(row=>{
+        const tr=document.createElement('tr');
+        const filesHtml=(row.files||[]).map((f,j)=>`<a href="${f.url}" target="_blank">파일${j+1}</a>`).join(' ');
+        tr.innerHTML=`<td>${row.idx}</td><td>${row.date}</td><td>${row.region}</td><td>${row.biz}</td><td>${row.no}</td><td>${row.name}</td><td>${row.type}</td><td>${row.desc}</td><td>${row.action}</td><td>${row.days}</td><td>${filesHtml||'-'}</td>`;
+        tb.appendChild(tr);
+      })
+    }
+    const accAdd=document.getElementById('accAdd');
+    const accProofBtn=document.getElementById('accProofBtn');
+    const accProof=document.getElementById('accProof');
+    const pick=(id)=>document.getElementById(id).value.trim();
+    if(accProofBtn&&accProof){ accProofBtn.addEventListener('click',()=>accProof.click()); }
+    if(accAdd){
+      accAdd.addEventListener('click',()=>{
+        const date=pick('accDate'); const region=pick('accRegion'); const biz=pick('accBiz'); const no=pick('accNo'); const name=pick('accName'); const type=pick('accType'); const desc=pick('accDesc'); const action=pick('accAction'); const days=pick('accDays');
+        if(!date||!region||!biz||!no||!name||!type||!desc){ alert('필수 항목을 입력하세요.'); return; }
+        const files=[...accProof.files||[]].map(f=>({name:f.name,url:URL.createObjectURL(f)}));
+        const list=getAcc(); list.unshift({date,region,biz,no,name,type,desc,action,days,files}); setAcc(list);
+        ['accDate','accRegion','accBiz','accNo','accName','accType','accDesc','accAction','accDays'].forEach(i=>document.getElementById(i).value='');
+        accProof.value='';
+        renderAcc();
+      })
+    }
+    renderAcc();
   </script>
 </body>
 </html>
